@@ -1,4 +1,4 @@
-package testet.test;
+package image.jpeg;
 
 import java.awt.Color;
 import java.awt.Graphics2D;

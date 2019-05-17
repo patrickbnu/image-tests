@@ -1,4 +1,6 @@
-package testet.test;
+package main.test;
+
+import image.jpeg.JPEGImageHelper;
 
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
@@ -24,7 +26,7 @@ public class TestImageConverter {
 	private static final float compression = 0.6f;
 	
 	public static void main(String[] args) throws IOException, ImageProcessingException {
-	    BufferedImage image = ImageIO.read(new File("original.jpg"));
+		BufferedImage image = ImageIO.read(new File("original.jpg"));
 		
 		image = JPEGImageHelper.resizeByWidth(image, width);
 		
@@ -42,14 +44,12 @@ public class TestImageConverter {
 		Metadata metadata = JpegMetadataReader.readMetadata(is);
 		
 		for (Directory directory : metadata.getDirectories()) {
-		    for (Tag tag : directory.getTags()) {
-		        System.out.println(tag);
-		    }
+			for (Tag tag : directory.getTags()) {
+				System.out.println(tag);
+			}
 		}
 		
 		System.out.println(" ---------------- ------------- ---------------");
 	}
-	
-	
 	
 }
