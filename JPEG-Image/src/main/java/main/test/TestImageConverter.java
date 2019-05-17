@@ -26,13 +26,13 @@ public class TestImageConverter {
 	private static final float compression = 0.6f;
 	
 	public static void main(String[] args) throws IOException, ImageProcessingException {
-		BufferedImage image = ImageIO.read(new File("original.jpg"));
+		BufferedImage image = ImageIO.read(new File("image/original.jpg"));
 		
 		image = JPEGImageHelper.resizeByWidth(image, width);
 		
 		image = JPEGImageHelper.adjustHeight(image, height);
 		
-		JPEGImageHelper.saveImage(new File("best.jpg"), image, dpi, compression);
+		JPEGImageHelper.saveImage(new File("image/best.jpg"), image, dpi, compression);
 	}
 	
 	// https://stackoverflow.com/questions/19224328/how-to-read-jpeg-file-attributes-with-java
