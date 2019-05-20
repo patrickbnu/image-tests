@@ -6,6 +6,7 @@ import java.awt.image.BufferedImage;
 import java.awt.image.BufferedImageOp;
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.util.Iterator;
 
 import javax.imageio.IIOImage;
@@ -29,6 +30,8 @@ public class JPEGImageHelper {
 	
 	public static final String IMAGE_FORMAT = "jpeg";
 	
+	private JPEGImageHelper() {}
+	
 	/**
 	 * Resizes the image to a new width keeping the proportion on height.
 	 * 
@@ -41,9 +44,8 @@ public class JPEGImageHelper {
 		
 		 // A good default filter, see class documentation for more info
 		BufferedImageOp resampler = new ResampleOp(width, newHeight, ResampleOp.FILTER_LANCZOS);
-	    BufferedImage output = resampler.filter(image, null);
 		
-		return output;
+		return resampler.filter(image, null);
 	}
 	
 	/**
@@ -64,7 +66,7 @@ public class JPEGImageHelper {
 			// image size greater than expected
 			
 			// gets Y coordinate to crop the image centralized
-			int y = (int) ((image.getHeight() - expectedHeight) / 2);
+			int y =  ((image.getHeight() - expectedHeight) / 2);
 			BufferedImage croped = image.getSubimage(0, y, originalWidth, expectedHeight);
 			
 			// create a copy because getSubimage shares the original data array.
@@ -76,7 +78,7 @@ public class JPEGImageHelper {
 			// image size smaller than expected
 			
 			// gets Y coordinate centralizing the image inside expected height
-			int y = (int) (( expectedHeight - image.getHeight()) / 2);
+			int y = (( expectedHeight - image.getHeight()) / 2);
 			
 			// create a new image with the expected height
 			BufferedImage copyOfImage = new BufferedImage(originalWidth, expectedHeight, BufferedImage.TYPE_INT_RGB);
@@ -107,8 +109,7 @@ public class JPEGImageHelper {
 	 * @throws IOException exceptions writing image in file.
 	 */
 	public static boolean saveImage(File output, BufferedImage image, int dpi, float compression) throws IOException {
-		output.delete();
-		
+		Files.delete(output.toPath());
 		
 		for (Iterator <ImageWriter> iw = ImageIO.getImageWritersByFormatName(IMAGE_FORMAT); iw.hasNext();) {
 			ImageWriter writer = iw.next();
@@ -122,7 +123,6 @@ public class JPEGImageHelper {
 			if (dpi > 0) { 
 				setImageMetadataDPI(metadata, dpi);
 			}
-			
 			final ImageOutputStream stream = ImageIO.createImageOutputStream(output);
 			try {
 				writer.setOutput(stream);
@@ -144,7 +144,7 @@ public class JPEGImageHelper {
 	}
 	
 	private static void setImageMetadataDPI(IIOMetadata metadata, int dpi) throws IIOInvalidTreeException {
-		String  DENSITY_UNITS_PIXELS_PER_INCH = "01";
+		String  densityUnitsPixelsPerInch = "01";
 		
 		String metadataFormat = "javax_imageio_jpeg_image_1.0";
 		IIOMetadataNode root = new IIOMetadataNode(metadataFormat);
@@ -156,7 +156,7 @@ public class JPEGImageHelper {
 		app0JFIF.setAttribute("minorVersion", "2");
 		app0JFIF.setAttribute("thumbWidth", "0");
 		app0JFIF.setAttribute("thumbHeight", "0");
-		app0JFIF.setAttribute("resUnits", DENSITY_UNITS_PIXELS_PER_INCH);
+		app0JFIF.setAttribute("resUnits", densityUnitsPixelsPerInch);
 		app0JFIF.setAttribute("Xdensity", String.valueOf(dpi));
 		app0JFIF.setAttribute("Ydensity", String.valueOf(dpi));
 		

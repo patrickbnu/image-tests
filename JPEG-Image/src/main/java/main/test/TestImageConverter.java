@@ -23,7 +23,7 @@ public class TestImageConverter {
 	private static final int height = 1384;
 	
 	private static final int dpi = 72;
-	private static final float compression = 0.6f;
+	private static final float compression = 1f;
 	
 	public static void main(String[] args) throws IOException, ImageProcessingException {
 		// transformImage(ImageIO.read(new File("image/original.jpg")), "image/api/original.jpg");
